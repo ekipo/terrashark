@@ -53,7 +53,7 @@ git clone https://github.com/LukasNiessen/terrashark.git "$env:USERPROFILE\.clau
 git clone https://github.com/LukasNiessen/terrashark.git "%USERPROFILE%\.claude\skills\terrashark"
 ```
 
-That's it. Claude Code auto-discovers skills in `~/.claude/skills/` — no restart needed.
+That's it. Claude Code auto-discovers skills in `~/.claude/skills/` - no restart needed.
 
 ### Option 2: Marketplace
 
@@ -64,11 +64,11 @@ Claude Code has a built-in plugin system with marketplace support. Instead of cl
 /plugin install terrashark
 ```
 
-Or use the interactive plugin manager — run `/plugin`, switch to the **Discover** tab, and install from there. The marketplace reads the `.claude-plugin/marketplace.json` in this repo to register TerraShark as an installable plugin.
+Or use the interactive plugin manager - run `/plugin`, switch to the **Discover** tab, and install from there. The marketplace reads the `.claude-plugin/marketplace.json` in this repo to register TerraShark as an installable plugin.
 
 ### Option 3: Codex
 
-Codex has no global skill system — setup is per-project. Clone TerraShark into your repo and reference it from your `AGENTS.md`:
+Codex has no global skill system - setup is per-project. Clone TerraShark into your repo and reference it from your `AGENTS.md`:
 
 ```bash
 # Clone into your project root
@@ -98,7 +98,7 @@ Done. Now ask Claude Code / Codex any Terraform question. TerraShark responses f
 /terrashark Refactor our EKS stack into separate state files per environment, add moved blocks to avoid recreation, set up a GitHub Actions pipeline with plan on PR and gated apply on merge, and wire in Checkov for compliance scanning
 ```
 
-**Or just ask naturally** — TerraShark activates automatically for any Terraform/OpenTofu task:
+**Or just ask naturally** - TerraShark activates automatically for any Terraform/OpenTofu task:
 
 ```
 Review my main.tf for security issues
@@ -119,11 +119,11 @@ https://github.com/user-attachments/assets/2bc4c9ff-9f54-4a49-8bf0-5cfc0f26dec6
 | Dimension                        | **TerraShark**                                        | **terraform-skill**                             | **No Skill** |
 | -------------------------------- | ----------------------------------------------------- | ----------------------------------------------- | ------------ |
 | **SKILL.md activation cost**     | ~600 tokens                                           | ~4,400 tokens                                   | 0            |
-| **Reference granularity**        | 18 focused files                                      | 6 large files                                   | —            |
+| **Reference granularity**        | 18 focused files                                      | 6 large files                                   | -            |
 | **Token burn per query**         | Low (load 1-2 small refs)                             | High (large refs, e.g. 1,126 lines for modules) | 0            |
-| **Architecture**                 | Failure-mode workflow                                 | Static reference manual                         | —            |
+| **Architecture**                 | Failure-mode workflow                                 | Static reference manual                         | -            |
 | **Diagnoses before generating**  | Yes (Step 2)                                          | No                                              | No           |
-| **Output contract**              | Yes — assumptions, tradeoffs, rollback                | No                                              | No           |
+| **Output contract**              | Yes - assumptions, tradeoffs, rollback                | No                                              | No           |
 | **Migration playbooks**          | Yes (5 playbooks)                                     | Partial (inline snippets)                       | No           |
 | **Good/bad/neutral examples**    | Yes (3 dedicated files)                               | Inline only                                     | No           |
 | **Do/Don't checklist**           | Yes (dedicated file)                                  | Inline only                                     | No           |
@@ -132,17 +132,17 @@ https://github.com/user-attachments/assets/2bc4c9ff-9f54-4a49-8bf0-5cfc0f26dec6
 | **Hallucination prevention**     | Core design goal                                      | Not addressed                                   | No           |
 | **Security-first defaults**      | Built-in                                              | Checklist-style                                 | No           |
 | **CI/CD templates**              | GitHub Actions, GitLab CI, Atlantis, Infracost        | GitHub Actions, GitLab CI, Atlantis             | No           |
-| **License**                      | MIT                                                   | Apache 2.0                                      | —            |
+| **License**                      | MIT                                                   | Apache 2.0                                      | -            |
 
 ### TerraShark vs terraform-skill
 
-The key difference is architectural. **terraform-skill** is a static reference manual: it dumps ~4,400 tokens into context on every activation, then loads additional reference files that can be over 1,000 lines each. It gives Claude information but never tells it _how to think_ about a problem. There's no diagnosis step, no risk assessment, and no structured output — Claude reads the reference and generates whatever it thinks fits.
+The key difference is architectural. **terraform-skill** is a static reference manual: it dumps ~4,400 tokens into context on every activation, then loads additional reference files that can be over 1,000 lines each. It gives Claude information but never tells it _how to think_ about a problem. There's no diagnosis step, no risk assessment, and no structured output - Claude reads the reference and generates whatever it thinks fits.
 
-**TerraShark** takes the opposite approach. The core SKILL.md is a 79-line operational workflow that costs ~600 tokens on activation — **over 7x leaner**. Instead of front-loading a wall of text, it forces Claude through a diagnostic sequence: capture context → identify failure modes → load _only_ the relevant references → propose fixes with explicit risk controls → validate → deliver a structured output contract.
+**TerraShark** takes the opposite approach. The core SKILL.md is a 79-line operational workflow that costs ~600 tokens on activation - **over 7x leaner**. Instead of front-loading a wall of text, it forces Claude through a diagnostic sequence: capture context → identify failure modes → load _only_ the relevant references → propose fixes with explicit risk controls → validate → deliver a structured output contract.
 
 This matters for three reasons:
 
-1. **Token efficiency.** terraform-skill burns ~4,400 tokens just to activate, before any reference files. A single reference file like `module-patterns.md` (1,126 lines, ~7,000 tokens) can double the cost again. TerraShark's activation is ~600 tokens, and its 18 granular reference files mean Claude loads only what's needed — typically one or two small, focused docs instead of one massive dump.
+1. **Token efficiency.** terraform-skill burns ~4,400 tokens just to activate, before any reference files. A single reference file like `module-patterns.md` (1,126 lines, ~7,000 tokens) can double the cost again. TerraShark's activation is ~600 tokens, and its 18 granular reference files mean Claude loads only what's needed - typically one or two small, focused docs instead of one massive dump.
 
 2. **Hallucination prevention.** terraform-skill provides good patterns but never asks Claude to _diagnose what could go wrong_. TerraShark's Step 2 forces failure-mode identification before any code is generated. Step 4 requires explicit risk controls for every fix. Step 7 enforces an output contract with assumptions, tradeoffs, and rollback notes. This is the difference between giving someone a cookbook and giving them a diagnostic checklist.
 
