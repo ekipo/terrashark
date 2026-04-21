@@ -161,6 +161,32 @@ This matters for three reasons:
 
 See `references/token-balance-rationale.md` for the full decision and tradeoffs.
 
+## 🧱 Trusted Module Awareness
+
+Hand-rolled `resource` blocks are one of the largest hallucination surfaces for LLMs — attribute names, defaults, and iteration shapes are where models drift. TerraShark recognizes the major vendor-maintained and community module registries and defaults to using them instead of generating raw resources, whenever a mature module covers the requested service.
+
+### How it helps
+
+- A pinned registry module replaces hundreds of lines of hand-rolled HCL with a version-locked interface already tested across many production stacks
+- Removes attribute-name, default-value, and `for_each` drift — the exact spots where LLMs slip
+- Enforces **exact** version pinning for production, so module upgrades don't silently change generated resource addresses
+
+### When it loads (lean-token approach)
+
+`references/trusted-modules.md` is pulled into context **only when the detected provider is one of the supported clouds**. AWS-only projects never pay the token cost for Azure or GCP guidance, and vice versa — matching TerraShark's core token-efficiency design.
+
+### Supported providers
+
+| Cloud        | Registry namespace         | Program                            |
+| ------------ | -------------------------- | ---------------------------------- |
+| AWS          | `terraform-aws-modules`    | Community standard                 |
+| Azure        | `Azure`                    | Azure Verified Modules (AVM)       |
+| GCP          | `terraform-google-modules` | Cloud Foundation Toolkit           |
+| Oracle Cloud | `oracle-terraform-modules` | Vendor-maintained                  |
+| IBM Cloud    | `terraform-ibm-modules`    | IBM Deployable Architectures       |
+
+Other ecosystems (Alibaba Cloud, DigitalOcean, Hetzner, etc.) are intentionally not included yet — their module programs are still small or early-stage, so recommending them as defaults would trade one failure mode (hallucinated attributes) for another (unmaintained wrappers). If a provider's ecosystem matures, it can be added later.
+
 ## 🐣 What's Included
 
 - A focused `SKILL.md` execution flow
@@ -172,6 +198,7 @@ See `references/token-balance-rationale.md` for the full decision and tradeoffs.
 - Risk-based test depth guidance with native test caveats and Terratest coverage
 - Rewritten good/bad/neutral example bank
 - Do/Don't pattern bank and MCP integration guidance
+- Trusted community/vendor module awareness (AWS, Azure, GCP, OCI, IBM) loaded conditionally
 
 ## 🔲 Repository Layout
 
@@ -199,6 +226,7 @@ Here an overview of the repository layout.
 | `references/examples-neutral.md`        | Context-based tradeoff examples                               |
 | `references/do-dont-patterns.md`        | Do/Don't pattern checklist                                    |
 | `references/mcp-integration.md`         | MCP integration guidance                                      |
+| `references/trusted-modules.md`         | Canonical community/vendor modules per cloud (conditional)    |
 | `references/token-balance-rationale.md` | Why the skill stays lean and where depth is kept              |
 | `.github/workflows/validate.yml`        | CI validation for skill structure and links                   |
 | `.github/PULL_REQUEST_TEMPLATE.md`      | PR quality and failure-mode checklist                         |
