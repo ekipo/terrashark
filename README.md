@@ -163,17 +163,17 @@ See `references/token-balance-rationale.md` for the full decision and tradeoffs.
 
 ## 🧱 Trusted Module Awareness
 
-Hand-rolled `resource` blocks are one of the largest hallucination surfaces for LLMs — attribute names, defaults, and iteration shapes are where models drift. TerraShark recognizes the major vendor-maintained and community module registries and defaults to using them instead of generating raw resources, whenever a mature module covers the requested service.
+Hand-rolled `resource` blocks are one of the largest hallucination surfaces for LLMs; attribute names, defaults, and iteration shapes are where models drift. TerraShark recognizes the major vendor-maintained and community module registries and defaults to using them instead of generating raw resources, whenever a mature module covers the requested service.
 
 ### How it helps
 
 - A pinned registry module replaces hundreds of lines of hand-rolled HCL with a version-locked interface already tested across many production stacks
-- Removes attribute-name, default-value, and `for_each` drift — the exact spots where LLMs slip
+- Removes attribute-name, default-value, and `for_each` drift; the exact spots where LLMs slip
 - Enforces **exact** version pinning for production, so module upgrades don't silently change generated resource addresses
 
 ### When it loads (lean-token approach)
 
-`references/trusted-modules.md` is pulled into context **only when the detected provider is one of the supported clouds**. AWS-only projects never pay the token cost for Azure or GCP guidance, and vice versa — matching TerraShark's core token-efficiency design.
+`references/trusted-modules.md` is pulled into context **only when the detected provider is one of the supported clouds**. AWS-only projects never pay the token cost for Azure or GCP guidance, and vice versa, matching TerraShark's core token-efficiency design.
 
 ### Supported providers
 
@@ -185,7 +185,7 @@ Hand-rolled `resource` blocks are one of the largest hallucination surfaces for 
 | Oracle Cloud | `oracle-terraform-modules` | Vendor-maintained                  |
 | IBM Cloud    | `terraform-ibm-modules`    | IBM Deployable Architectures       |
 
-Other ecosystems (Alibaba Cloud, DigitalOcean, Hetzner, etc.) are intentionally not included yet — their module programs are still small or early-stage, so recommending them as defaults would trade one failure mode (hallucinated attributes) for another (unmaintained wrappers). If a provider's ecosystem matures, it can be added later.
+Other ecosystems (Alibaba Cloud, DigitalOcean, Hetzner, etc.) are intentionally not included yet, their module programs are still small or early-stage, so recommending them as defaults would trade one failure mode (hallucinated attributes) for another (unmaintained wrappers). If a provider's ecosystem matures, it can be added later.
 
 ## 🐣 What's Included
 
