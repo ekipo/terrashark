@@ -13,6 +13,8 @@
 
 </div>
 
+The #1 Terraform skill for Claude Code and Codex, measured by GitHub stars.
+
 ### Fixes Hallucinations.
 
 LLMs hallucinate a lot when it comes to Terraform. This skill fixes it. It includes best practices for Terraform and OpenTofu - good, bad, and neutral examples so the AI avoids common mistakes. Using TerraShark, the AI keeps proven practices in mind, eliminates hallucinations, and defaults to modular, reusable, security-first design.
@@ -27,7 +29,7 @@ TerraShark is primarily based on [HashiCorp official recommended practices](http
 
 ---
 
-[Quick Start](#-quick-start) • [Why TerraShark](#-why-terrashark) • [Token Strategy](#-token-strategy) • [What's Included](#-whats-included) • [How It Works](#-how-it-works) • [Philosophy](PHILOSOPHY.md)
+[Quick Start](#-quick-start) • [Why TerraShark?](#-library-comparison) • [Token Strategy](#-token-strategy) • [What's Included](#-whats-included) • [How It Works](#-how-it-works) • [Philosophy](PHILOSOPHY.md)
 
 ---
 
@@ -112,27 +114,44 @@ Migrate this module from count to for_each
 
 https://github.com/user-attachments/assets/2bc4c9ff-9f54-4a49-8bf0-5cfc0f26dec6
 
-## 🏁 Why TerraShark
+## 📊 Library Comparison
 
-### Overview
+Here's how TerraShark compares to other Terraform and OpenTofu agent skills:
 
-| Dimension                        | **TerraShark**                                        | **terraform-skill**                             | **No Skill** |
-| -------------------------------- | ----------------------------------------------------- | ----------------------------------------------- | ------------ |
-| **SKILL.md activation cost**     | ~600 tokens                                           | ~4,400 tokens                                   | 0            |
-| **Reference granularity**        | 18 focused files                                      | 6 large files                                   | -            |
-| **Token burn per query**         | Low (load 1-2 small refs)                             | High (large refs, e.g. 1,126 lines for modules) | 0            |
-| **Architecture**                 | Failure-mode workflow                                 | Static reference manual                         | -            |
-| **Diagnoses before generating**  | Yes (Step 2)                                          | No                                              | No           |
-| **Output contract**              | Yes - assumptions, tradeoffs, rollback                | No                                              | No           |
-| **Migration playbooks**          | Yes (5 playbooks)                                     | Partial (inline snippets)                       | No           |
-| **Good/bad/neutral examples**    | Yes (3 dedicated files)                               | Inline only                                     | No           |
-| **Do/Don't checklist**           | Yes (dedicated file)                                  | Inline only                                     | No           |
-| **Compliance framework mapping** | Yes (ISO 27001, SOC 2, FedRAMP, GDPR, PCI DSS, HIPAA) | Partial (SOC 2, HIPAA, PCI-DSS)                 | No           |
-| **MCP integration guidance**     | Yes                                                   | No                                              | No           |
-| **Hallucination prevention**     | Core design goal                                      | Not addressed                                   | No           |
-| **Security-first defaults**      | Built-in                                              | Checklist-style                                 | No           |
-| **CI/CD templates**              | GitHub Actions, GitLab CI, Atlantis, Infracost        | GitHub Actions, GitLab CI, Atlantis             | No           |
-| **License**                      | MIT                                                   | Apache 2.0                                      | -            |
+| Feature                          | **TerraShark**                                        | **Anton Babenko terraform-skill** | **terraform-patterns**               |
+| -------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------------------------------ |
+| **Core Architecture**            | ✅ Failure-mode workflow                              | ⚠️ Static reference manual        | ⚠️ Pattern checklist                 |
+| **SKILL.md Activation Cost**     | ✅ ~600 tokens                                        | ⚠️ ~4,400 tokens                  | ⚠️ Single broad reference            |
+| **Reference Granularity**        | ✅ 18 focused files                                   | ⚠️ 6 large files                  | ❌ No focused reference library      |
+| **Token Burn Per Query**         | ✅ Low (load 1-2 small refs)                          | ⚠️ High for deep references       | ⚠️ Loads broad guidance              |
+| **Diagnoses Before Generating**  | ✅ Step 2 requires diagnosis                          | ❌ No                             | ❌ No                                |
+| **Hallucination Prevention**     | ✅ Core design goal                                   | ⚠️ Indirect via best practices    | ⚠️ Indirect via patterns             |
+| **Output Contract**              | ✅ Assumptions, tradeoffs, rollback                   | ❌ No                             | ❌ No                                |
+| **Failure-Mode Coverage**        | ✅ Identity, secrets, blast radius, CI, compliance    | ⚠️ General state/security advice  | ⚠️ General anti-pattern summary      |
+| **Migration Playbooks**          | ✅ 5 dedicated playbooks                              | ⚠️ Partial inline snippets        | ⚠️ Import and moved-block notes      |
+| **Good/Bad/Neutral Examples**    | ✅ 3 dedicated files                                  | ⚠️ Inline DO/DON'T examples       | ⚠️ Inline BAD/GOOD snippets          |
+| **Do/Don't Checklist**           | ✅ Dedicated file                                     | ⚠️ Inline only                    | ⚠️ Inline only                       |
+| **Compliance Framework Mapping** | ✅ ISO 27001, SOC 2, FedRAMP, GDPR, PCI DSS, HIPAA    | ⚠️ Scanner-oriented guidance      | ❌ No                                |
+| **Trusted Module Awareness**     | ✅ AWS, Azure, GCP, OCI, IBM loaded conditionally     | ⚠️ AWS module context             | ❌ No                                |
+| **MCP Integration Guidance**     | ✅ Dedicated reference                                | ⚠️ Optional Terraform MCP mention | ❌ No                                |
+| **Claude + Codex Support**       | ✅ First-class Claude Code and Codex setup            | ⚠️ Broad multi-agent setup        | ⚠️ Claude plugin oriented            |
+| **Security-First Defaults**      | ✅ Built into the workflow                            | ⚠️ Checklist-style                | ⚠️ Style-guide based                 |
+| **CI/CD Templates**              | ✅ GitHub Actions, GitLab CI, Atlantis, Infracost     | ✅ GitHub Actions, GitLab CI      | ⚠️ Pipeline rules only               |
+| **License**                      | ✅ MIT                                                | ⚠️ Apache 2.0                     | ❌ Not highlighted in skill listing  |
+
+As you see in the table, there are some features that are only supported by us. Here is a brief highlight of those that we believe are the most critical of them:
+
+- **Failure-mode workflow**: TerraShark does not just give the agent Terraform facts. It forces the agent to identify the likely failure mode first, then load the exact reference material needed for that risk.
+
+- **Output contract**: TerraShark responses include assumptions, remediation choices, tradeoffs, validation steps, and rollback notes. Other skills leave that structure to the model.
+
+- **Token efficiency**: TerraShark keeps the activation path tiny and moves depth into focused references. This gives the agent the right Terraform context without turning every request into a large reference dump.
+
+- **Compliance mapping**: TerraShark includes explicit mappings for ISO 27001, SOC 2, FedRAMP, GDPR, PCI DSS, and HIPAA. Other skills focus more on scanners than audit-ready control mapping.
+
+- **Trusted module awareness**: TerraShark knows when to prefer mature vendor and community modules for AWS, Azure, GCP, Oracle Cloud, and IBM Cloud, reducing the surface area for hallucinated raw resources.
+
+- **LLM-specific hallucination prevention**: TerraShark is designed around the ways AI agents fail at infrastructure code: unstable identity, leaked secrets, wide blast radius, CI drift, and weak compliance gates.
 
 ### TerraShark vs terraform-skill
 
