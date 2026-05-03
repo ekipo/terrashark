@@ -122,7 +122,7 @@ Here's how TerraShark compares to other Terraform and OpenTofu agent skills:
 | -------------------------------- | ----------------------------------------------------- | --------------------------------- | ------------------------------------ |
 | **Core Architecture**            | ✅ Failure-mode workflow                              | ⚠️ Static reference manual        | ⚠️ Pattern checklist                 |
 | **SKILL.md Activation Cost**     | ✅ ~600 tokens                                        | ⚠️ ~4,400 tokens                  | ⚠️ Single broad reference            |
-| **Reference Granularity**        | ✅ 18 focused files                                   | ⚠️ 6 large files                  | ❌ No focused reference library      |
+| **Reference Granularity**        | ✅ 19 focused files                                   | ⚠️ 6 large files                  | ❌ No focused reference library      |
 | **Token Burn Per Query**         | ✅ Low (load 1-2 small refs)                          | ⚠️ High for deep references       | ⚠️ Loads broad guidance              |
 | **Diagnoses Before Generating**  | ✅ Step 2 requires diagnosis                          | ❌ No                             | ❌ No                                |
 | **Hallucination Prevention**     | ✅ Core design goal                                   | ⚠️ Indirect via best practices    | ⚠️ Indirect via patterns             |
@@ -157,15 +157,15 @@ As you see in the table, there are some features that are only supported by us. 
 
 The key difference is architectural. **terraform-skill** is a static reference manual: it dumps ~4,400 tokens into context on every activation, then loads additional reference files that can be over 1,000 lines each. It gives Claude information but never tells it _how to think_ about a problem. There's no diagnosis step, no risk assessment, and no structured output - Claude reads the reference and generates whatever it thinks fits.
 
-**TerraShark** takes the opposite approach. The core SKILL.md is a 79-line operational workflow that costs ~600 tokens on activation - **over 7x leaner**. Instead of front-loading a wall of text, it forces Claude through a diagnostic sequence: capture context → identify failure modes → load _only_ the relevant references → propose fixes with explicit risk controls → validate → deliver a structured output contract.
+**TerraShark** takes the opposite approach. The core SKILL.md is an 86-line operational workflow that costs ~600 tokens on activation - **over 7x leaner**. Instead of front-loading a wall of text, it forces Claude through a diagnostic sequence: capture context → identify failure modes → load _only_ the relevant references → propose fixes with explicit risk controls → validate → deliver a structured output contract.
 
 This matters for three reasons:
 
-1. **Token efficiency.** terraform-skill burns ~4,400 tokens just to activate, before any reference files. A single reference file like `module-patterns.md` (1,126 lines, ~7,000 tokens) can double the cost again. TerraShark's activation is ~600 tokens, and its 18 granular reference files mean Claude loads only what's needed - typically one or two small, focused docs instead of one massive dump.
+1. **Token efficiency.** terraform-skill burns ~4,400 tokens just to activate, before any reference files. A single reference file like `module-patterns.md` (1,126 lines, ~7,000 tokens) can double the cost again. TerraShark's activation is ~600 tokens, and its 19 granular reference files mean Claude loads only what's needed - typically one or two small, focused docs instead of one massive dump.
 
 2. **Hallucination prevention.** terraform-skill provides good patterns but never asks Claude to _diagnose what could go wrong_. TerraShark's Step 2 forces failure-mode identification before any code is generated. Step 4 requires explicit risk controls for every fix. Step 7 enforces an output contract with assumptions, tradeoffs, and rollback notes. This is the difference between giving someone a cookbook and giving them a diagnostic checklist.
 
-3. **Reference coverage.** TerraShark ships 18 focused reference files covering failure modes, migration playbooks, good/bad/neutral examples, do/don't checklists, compliance framework mappings, and MCP integration. terraform-skill has 6 larger files that go deep on testing and module patterns but lack migration playbooks, explicit anti-pattern banks, compliance mappings beyond a few frameworks, and MCP guidance.
+3. **Reference coverage.** TerraShark ships 19 focused reference files covering failure modes, backend-specific state safety, migration playbooks, good/bad/neutral examples, do/don't checklists, compliance framework mappings, and MCP integration. terraform-skill has 6 larger files that go deep on testing and module patterns but lack migration playbooks, explicit anti-pattern banks, compliance mappings beyond a few frameworks, and MCP guidance.
 
 **In short:** TerraShark is the better skill due to 7x leaner activation, failure-mode-first diagnostic workflow, output contracts, granular references, and LLM-specific hallucination prevention. terraform-skill wins on HCL example depth and testing docs, but TerraShark's architecture is fundamentally better designed for the core use case of LLM-assisted IaC generation.
 
@@ -192,7 +192,7 @@ Hand-rolled `resource` blocks are one of the largest hallucination surfaces for 
 
 ### When it loads (lean-token approach)
 
-`references/trusted-modules.md` is pulled into context **only when the detected provider is one of the supported clouds**. AWS-only projects never pay the token cost for Azure or GCP guidance, and vice versa, matching TerraShark's core token-efficiency design.
+`references/conditional/trusted-modules.md` is pulled into context **only when the detected provider is one of the supported clouds**. AWS-only projects never pay the token cost for Azure or GCP guidance, and vice versa, matching TerraShark's core token-efficiency design.
 
 ### Supported providers
 
@@ -211,6 +211,7 @@ Other ecosystems (Alibaba Cloud, DigitalOcean, Hetzner, etc.) are intentionally 
 - A focused `SKILL.md` execution flow
 - Failure-mode-first guidance to prevent common IaC hallucinations
 - Core failure-mode references: identity churn, secret exposure, blast radius, CI drift, compliance gates
+- Backend-specific state safety loaded conditionally for state storage, locking, migration, and restore work
 - Expanded architecture guidance (state, boundaries, module roles)
 - Refactor/migration playbooks for safe evolution
 - Stronger CI/CD and governance patterns (including Atlantis + Infracost)
@@ -233,6 +234,7 @@ Here an overview of the repository layout.
 | `references/ci-drift.md`                | Production CI drift prevention and plan/apply integrity       |
 | `references/compliance-gates.md`        | Policy gates, approvals, evidence, framework mappings         |
 | `references/structure-and-state.md`     | State, boundaries, and apply safety                           |
+| `references/conditional/backend-state-safety.md` | Backend-specific state safety and migration guardrails |
 | `references/module-architecture.md`     | Module role model and composition rules                       |
 | `references/coding-standards.md`        | Naming, typing, iteration, versioning                         |
 | `references/migration-playbooks.md`     | moved/import/refactor/upgrade playbooks                       |
@@ -245,7 +247,7 @@ Here an overview of the repository layout.
 | `references/examples-neutral.md`        | Context-based tradeoff examples                               |
 | `references/do-dont-patterns.md`        | Do/Don't pattern checklist                                    |
 | `references/mcp-integration.md`         | MCP integration guidance                                      |
-| `references/trusted-modules.md`         | Canonical community/vendor modules per cloud (conditional)    |
+| `references/conditional/trusted-modules.md` | Canonical community/vendor modules per cloud (conditional) |
 | `references/token-balance-rationale.md` | Why the skill stays lean and where depth is kept              |
 | `.github/workflows/validate.yml`        | CI validation for skill structure and links                   |
 | `.github/PULL_REQUEST_TEMPLATE.md`      | PR quality and failure-mode checklist                         |
@@ -344,3 +346,7 @@ This project is under the **MIT** license.
 **Website:** https://terraformskill.com/
 
 **GitHub Pages:** [https://lukasniessen.github.io/terrashark/](https://lukasniessen.github.io/terrashark/)
+
+## Conditional Reference Retrieval (CRR)
+
+TerraShark adheres to Conditional Reference Retrieval (CRR): conditional references live under `references/conditional/`, are loaded only when concrete signals are detected, and neighboring conditional references are not loaded unless the task spans multiple detected routes.

@@ -4,13 +4,13 @@ TerraShark is a lean, failure-mode-first Terraform skill for [Claude Code](https
 
 ## Why Use a Terraform Skill?
 
-LLMs hallucinate frequently when generating Terraform code. They produce configurations that are syntactically valid but operationally dangerous — unstable resource identities, leaked secrets, oversized blast radii, CI drift, and missing compliance gates. TerraShark fixes this by embedding a 7-step diagnostic workflow and 18 granular reference files directly into the AI's context.
+LLMs hallucinate frequently when generating Terraform code. They produce configurations that are syntactically valid but operationally dangerous — unstable resource identities, leaked secrets, oversized blast radii, CI drift, and missing compliance gates. TerraShark fixes this by embedding a 7-step diagnostic workflow and 19 granular reference files directly into the AI's context.
 
 ## Key Features
 
 - **Failure-mode-first architecture** — diagnoses risks before generating code
 - **~600 token activation cost** — over 7x leaner than alternatives
-- **18 granular reference files** — loads only what's relevant per query
+- **19 granular reference files** — loads only what's relevant per query
 - **LLM-specific guardrails** — explicitly names and prevents common AI hallucination patterns
 - **Output contracts** — every response includes assumptions, tradeoffs, and rollback notes
 - **5 migration playbooks** — safe count-to-for_each, rename, import, secrets, and upgrade flows

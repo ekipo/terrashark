@@ -24,6 +24,7 @@
 ## Terraform Architecture Guidance
 
 * [Structure and State](architecture/structure-and-state.md)
+* [Backend State Safety](architecture/backend-state-safety.md)
 * [Module Architecture](architecture/module-architecture.md)
 * [Coding Standards](architecture/coding-standards.md)
 

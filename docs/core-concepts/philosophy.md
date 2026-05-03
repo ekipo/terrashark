@@ -17,10 +17,10 @@ TerraShark is designed for minimal activation cost:
 | Metric | TerraShark | Typical Alternative |
 |---|---|---|
 | Activation cost | ~600 tokens | ~4,400 tokens |
-| Reference files | 18 focused files | 6 large files |
+| Reference files | 19 focused files | 6 large files |
 | Loaded per query | 1-2 small files | Large reference dumps |
 
-The core `SKILL.md` is 79 lines containing no HCL examples, no inline code blocks, and no tutorial material. It is purely procedural. Depth lives in 18 granular reference files loaded on demand.
+The core `SKILL.md` is 86 lines containing no HCL examples, no inline code blocks, and no tutorial material. It is purely procedural. Depth lives in 19 granular reference files loaded on demand.
 
 ## LLM-Aware Guardrails
 
@@ -50,12 +50,12 @@ This makes outputs auditable. A reader can check assumptions, verify failure mod
 
 ## Reference Granularity
 
-The 18 reference files are organized by concern, not by Terraform concept:
+The 19 reference files are organized by concern, not by Terraform concept:
 
 | Category | Files | When Loaded |
 |---|---|---|
 | **Primary failure modes** | Identity churn, secret exposure, blast radius, CI drift, compliance gates | When that failure mode is diagnosed |
-| **Structural guidance** | Structure/state, module architecture, coding standards | When designing or refactoring |
+| **Structural guidance** | Structure/state, backend state safety, module architecture, coding standards | When designing, refactoring, or changing backends |
 | **Operational references** | Migration playbooks, testing matrix, CI delivery, security/governance, quick ops | For specific operational tasks |
 | **Pattern banks** | Good examples, bad examples, neutral examples, do/don't patterns | For review or teaching |
 | **Integration and meta** | MCP integration, token balance rationale | When relevant |

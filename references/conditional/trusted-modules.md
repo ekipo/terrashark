@@ -1,6 +1,12 @@
 # Trusted Community / Vendor Modules
 
-Load this reference when the detected provider is `aws`, `azurerm`, `google`, `oci`, or `ibm`.
+**Load this reference when detected:** provider `aws`, `azurerm`, `google`, `oci`, or `ibm`.
+
+## Detection signals
+
+- required provider names `aws`, `azurerm`, `google`, `oci`, or `ibm`
+- requests to create common cloud primitives such as network, Kubernetes, database, object storage, load balancer, IAM, or security-group resources
+- user asks for a reusable module and has not explicitly requested raw provider resources
 
 ## Why this matters
 
@@ -88,3 +94,20 @@ When a trusted module exists for the requested resource and the user has not ask
 - default to the registry module
 - pin an exact version
 - state the chosen source and version in the output contract's assumptions so the user can redirect
+
+## Validation checks
+
+- verify the module source namespace in the Terraform Registry or the vendor's official module catalog
+- inspect recent release activity before recommending the module for production
+- pin an exact version and record it in the output assumptions
+- check the module interface instead of inventing input names from memory
+- confirm generated outputs expose only the consumer contract, not full provider objects
+
+## LLM mistake checklist
+
+- inventing module names that do not exist in the trusted namespace
+- using a mature module source but hallucinating its variable names
+- floating production module versions with `~>` or no `version`
+- wrapping a trusted module only to re-expose every input unchanged
+- defaulting to raw resources when a mature trusted module covers the request
+- using an unverified fork, typo namespace, or random Git source without review

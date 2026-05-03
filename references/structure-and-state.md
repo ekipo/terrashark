@@ -35,6 +35,7 @@ Pick one and document why.
 - encryption at rest and in transit
 - narrow IAM on state and lock stores
 - versioned backup and restore test at least once
+- load `references/conditional/backend-state-safety.md` for backend-specific locking, access, and migration guardrails
 
 ## Cross-stack dependencies
 

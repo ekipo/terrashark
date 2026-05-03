@@ -39,6 +39,7 @@ Pick one and document why.
 - Encryption at rest and in transit
 - Narrow IAM on state and lock stores
 - Versioned backup with restore tested at least once
+- Load [Backend State Safety](backend-state-safety.md) for backend-specific locking, access, and migration guardrails
 
 ## Cross-Stack Dependencies
 

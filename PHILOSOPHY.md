@@ -22,11 +22,11 @@ The model diagnoses before it generates. This prevents the most common failure p
 
 Context window space is a finite resource. Every token spent on skill content is a token unavailable for the user's actual codebase, conversation history, and tool results.
 
-TerraShark is designed for minimal activation cost. The core SKILL.md is 79 lines (~600 tokens). It contains no HCL examples, no inline code blocks, no tutorial material. It is purely procedural: a workflow the model follows.
+TerraShark is designed for minimal activation cost. The core SKILL.md is 86 lines (~600 tokens). It contains no HCL examples, no inline code blocks, no tutorial material. It is purely procedural: a workflow the model follows.
 
-Depth lives in 18 granular reference files. The model loads only the 1-2 files relevant to the diagnosed failure mode. A query about secret handling never loads the CI delivery patterns. A query about module architecture never loads the compliance gates.
+Depth lives in 19 granular reference files. The model loads only the 1-2 files relevant to the diagnosed failure mode. A query about secret handling never loads the CI delivery patterns. A query about module architecture never loads the compliance gates.
 
-This granularity matters. A single large reference file forces the model to process thousands of irrelevant tokens. 18 small files let it load precisely what it needs.
+This granularity matters. A single large reference file forces the model to process thousands of irrelevant tokens. 19 small files let it load precisely what it needs.
 
 ## LLM-Aware Guardrails
 
@@ -56,13 +56,13 @@ This makes outputs auditable. A reader can check whether the model's assumptions
 
 ## Reference Granularity
 
-The 18 reference files are organized by concern, not by Terraform concept:
+The 19 reference files are organized by concern, not by Terraform concept:
 
 **Primary failure modes** (loaded when the failure mode is diagnosed):
 - Identity churn, secret exposure, blast radius, CI drift, compliance gates
 
-**Structural guidance** (loaded when designing or refactoring):
-- Structure and state, module architecture, coding standards
+**Structural guidance** (loaded when designing, refactoring, or changing backends):
+- Structure and state, backend state safety, module architecture, coding standards
 
 **Operational references** (loaded for specific tasks):
 - Migration playbooks, testing matrix, CI delivery patterns, security and governance, quick ops

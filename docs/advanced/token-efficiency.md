@@ -14,15 +14,15 @@ Most Terraform skills dump huge walls of text into the AI's context window on ev
 
 ### Lean Activation (~600 tokens)
 
-The core `SKILL.md` is 79 lines containing:
+The core `SKILL.md` is 86 lines containing:
 - No HCL examples
 - No inline code blocks
 - No tutorial material
 - Pure procedure: a workflow the model follows
 
-### Granular References (18 files)
+### Granular References (19 files)
 
-Instead of 6 large files (as in alternatives), TerraShark uses 18 focused files. The model loads only the 1-2 files relevant to the diagnosed failure mode.
+Instead of 6 large files (as in alternatives), TerraShark uses 19 focused files. The model loads only the 1-2 files relevant to the diagnosed failure mode.
 
 ### Content Inclusion Rules
 
